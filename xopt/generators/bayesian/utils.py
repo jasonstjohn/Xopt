@@ -109,16 +109,16 @@ def get_training_data_batched(
     input_data = input_data[non_nans_all]
     outcome_data = outcome_data[non_nans_all]
 
-    train_X = torch.tensor(input_data.to_numpy(dtype="double"))
+    train_X = torch.tensor(input_data.to_numpy(dtype="double").copy())
 
-    train_Y = torch.tensor(outcome_data[outcome_names].to_numpy(dtype="double"))
+    train_Y = torch.tensor(outcome_data[outcome_names].to_numpy(dtype="double").copy())
 
     train_Yvar = None
     yvar_names = [f"{outcome}_var" for outcome in outcome_names]
     have_yvar = [x in data for x in yvar_names]
     if all(have_yvar):
         train_Yvar = torch.tensor(
-            data.loc[non_nans_all, yvar_names].to_numpy(dtype="double")
+            data.loc[non_nans_all, yvar_names].to_numpy(dtype="double").copy()
         )
     elif not any(have_yvar):
         # no var

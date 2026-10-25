@@ -323,7 +323,7 @@ class TurboController(XoptBaseModel, ABC):
             The subset of data within the trust region.
         """
         active_variable_names = self._get_trust_region_variable_names(generator)
-        variable_data = torch.tensor(data[active_variable_names].to_numpy())
+        variable_data = torch.tensor(data[active_variable_names].to_numpy().copy())
 
         bounds = self.get_trust_region(generator)
 

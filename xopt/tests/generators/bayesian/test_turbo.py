@@ -259,6 +259,24 @@ class TestTurbo(TestCase):
             restricted_data["x1"].to_numpy(), np.array([0.45, 0.56, 0.67])
         )
 
+    def test_reversed_column_order(self):
+        # columns stored as [x2, x1]: selecting [x1, x2] gives a negative-stride
+        # view, which torch.tensor rejects
+        test_vocs = deepcopy(TEST_VOCS_BASE)
+        names = test_vocs.variable_names
+        data = TEST_VOCS_DATA[names[::-1] + [c for c in TEST_VOCS_DATA if c not in names]]
+        data = data.copy()
+        assert data[names].to_numpy().strides[1] < 0
+
+        gen = UpperConfidenceBoundGenerator(
+            vocs=test_vocs,
+            turbo_controller=OptimizeTurboController(
+                vocs=test_vocs, restrict_model_data=True
+            ),
+        )
+        gen.add_data(data)
+        gen.generate(1)
+
     def test_with_constraints(self):
         # test in 1D
         test_vocs = deepcopy(TEST_VOCS_BASE)
