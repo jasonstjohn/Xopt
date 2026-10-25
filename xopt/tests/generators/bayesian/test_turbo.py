@@ -264,7 +264,9 @@ class TestTurbo(TestCase):
         # view, which torch.tensor rejects
         test_vocs = deepcopy(TEST_VOCS_BASE)
         names = test_vocs.variable_names
-        data = TEST_VOCS_DATA[names[::-1] + [c for c in TEST_VOCS_DATA if c not in names]]
+        data = TEST_VOCS_DATA[
+            names[::-1] + [c for c in TEST_VOCS_DATA if c not in names]
+        ]
         data = data.copy()
         assert data[names].to_numpy().strides[1] < 0
 

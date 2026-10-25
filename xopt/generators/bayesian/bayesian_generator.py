@@ -1319,7 +1319,9 @@ class MultiObjectiveBayesianGenerator(BayesianGenerator, ABC):
         )
 
         variable_data = torch.tensor(var_df[self.vocs.variable_names].to_numpy().copy())
-        objective_data = torch.tensor(obj_df[self.vocs.objective_names].to_numpy().copy())
+        objective_data = torch.tensor(
+            obj_df[self.vocs.objective_names].to_numpy().copy()
+        )
         weights = set_botorch_weights(self.vocs)[: self.vocs.n_objectives]
         return variable_data, objective_data * weights, weights
 
